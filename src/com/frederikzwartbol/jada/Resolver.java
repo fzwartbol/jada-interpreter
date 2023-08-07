@@ -8,7 +8,6 @@ import java.util.Stack;
 class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     private final Interpreter interpreter;
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
-
     private FunctionType currentFunction = FunctionType.NONE;
 
     Resolver(Interpreter interpreter) {
@@ -64,6 +63,22 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
     private void resolveFunction(
             Stmt.Function function, FunctionType type) {
+        FunctionType enclosingFunction = currentFunction;
+        currentFunction = type;
+
+        beginScope();
+        for (Token param : function.params) {
+            declare(param);
+            define(param);
+        }
+        resolve(function.body);
+        endScope();
+        currentFunction = enclosingFunction;
+    }
+
+
+    private void resolveAnonFunction(
+            Expr.AnonFunc function, FunctionType type) {
         FunctionType enclosingFunction = currentFunction;
         currentFunction = type;
 
@@ -176,6 +191,13 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
             resolve(argument);
         }
 
+        return null;
+    }
+
+    @Override
+    public Void visitAnonFuncExpr(final Expr.AnonFunc expr) {
+
+        resolveAnonFunction(expr, FunctionType.FUNCTION);
         return null;
     }
 

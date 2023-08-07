@@ -5,8 +5,8 @@ fun thrice(fn) {
 }
 
 thrice(fun (a) {
-  print a;
+  print a+a;
 });
-// "1".
 // "2".
-// "3".
+// "4".
+// "6".
