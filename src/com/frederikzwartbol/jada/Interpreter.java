@@ -66,13 +66,22 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
     @Override
     public Void visitClassStmt(Stmt.Class stmt) {
+        Object superclass = null;
+        if (stmt.superclass != null) {
+            superclass = evaluate(stmt.superclass);
+            if (!(superclass instanceof JadaClass)) {
+                throw new RuntimeError(stmt.superclass.name,
+                        "Superclass must be a class.");
+            }
+        }
+
         environment.define(stmt.name.lexeme, null);
         Map<String, JadaFunction> methods = new HashMap<>();
         for (Stmt.Function method : stmt.methods) {
             JadaFunction function = new JadaFunction(method, environment, method.name.lexeme.equals("init"));
             methods.put(method.name.lexeme, function);
         }
-        JadaClass klass = new JadaClass(stmt.name.lexeme, methods);
+        JadaClass klass = new JadaClass(stmt.name.lexeme, (JadaClass)superclass, methods);
         environment.assign(stmt.name, klass);
         return null;
     }

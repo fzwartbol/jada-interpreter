@@ -6,15 +6,20 @@ import java.util.Map;
 public class JadaClass implements JadaCallable {
     final String name;
     private final Map<String, JadaFunction> methods;
+    private final JadaClass superclass;
 
-    JadaClass(String name, Map<String, JadaFunction> methods) {
+    JadaClass(String name,  JadaClass superclass, Map<String,JadaFunction> methods) {
         this.name = name;
         this.methods = methods;
+        this.superclass = superclass;
     }
 
     JadaFunction findMethod(String name) {
         if (methods.containsKey(name)) {
             return methods.get(name);
+        }
+        if (superclass != null) {
+            return superclass.findMethod(name);
         }
         return null;
     }

@@ -14,7 +14,13 @@ class JadaFunction implements JadaCallable {
     }
 
     /**
-     * Binds the function to an instance. So if the function is reassigned it still knows its parent class.
+     * Binds the function to an instance. So if the function is reassigned it still knows its original parent class.
+     * see following example:
+     * 'class Foo { bar() { print "bar"; } }'
+     * 'var foo = Foo();'
+     * 'var bar = foo.bar;'
+     * 'bar();'
+     *
      * @param instance
      * @return
      */

@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
+ * Generates  classes for the abstract syntax tree.
  */
 public class GenerateAst {
     public static void main(String[] args) throws IOException {
@@ -34,7 +34,7 @@ public class GenerateAst {
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Block      : List<Stmt> statements",
-                "Class      : Token name, List<Stmt.Function> methods",
+                "Class      : Token name, Expr.Variable superclass, List<Stmt.Function> methods",
                 "Expression : Expr expression",
                 "Function   : Token name, List<Token> params, List<Stmt> body",
                 "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
