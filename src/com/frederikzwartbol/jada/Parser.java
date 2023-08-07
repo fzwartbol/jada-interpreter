@@ -37,6 +37,7 @@ class Parser {
     }
 
     private Expr expression() {
+        if (match(FUN)) return anoFunction("function");
         return assignment();
     }
 
@@ -173,6 +174,27 @@ class Parser {
         List<Stmt> body = block();
         return new Stmt.Function(name, parameters, body);
     }
+
+    private Expr.AnonFunc anoFunction(String kind) {
+        consume(LEFT_PAREN, "Expect '(' after " + kind + " name.");
+        List<Token> parameters = new ArrayList<>();
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (parameters.size() >= 255) {
+                    error(peek(), "Can't have more than 255 parameters.");
+                }
+
+                parameters.add(
+                        consume(IDENTIFIER, "Expect parameter name."));
+            } while (match(COMMA));
+        }
+        consume(RIGHT_PAREN, "Expect ')' after parameters.");
+
+        consume(LEFT_BRACE, "Expect '{' before " + kind + " body.");
+        List<Stmt> body = block();
+        return new Expr.AnonFunc(parameters, body);
+    }
+
 
 
     private List<Stmt> block() {

@@ -153,7 +153,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
         List<Object> arguments = new ArrayList<>();
         for (Expr argument : expr.arguments) {
-            arguments.add(evaluate(argument));
+            if (argument instanceof Expr.AnonFunc) {
+                arguments.add(new AnonymFunction((Expr.AnonFunc) argument,environment));
+            } else{
+                arguments.add(evaluate(argument));
+            }
         }
 
         if (!(callee instanceof JadaCallable)) {
@@ -169,6 +173,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
                     arguments.size() + ".");
         }
         return function.call(this, arguments);
+    }
+
+    @Override
+    public Object visitAnonFuncExpr(final Expr.AnonFunc expr) {
+        return new AnonymFunction(expr,environment);
     }
 
     /**

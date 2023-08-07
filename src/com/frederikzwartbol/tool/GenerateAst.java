@@ -18,6 +18,7 @@ public class GenerateAst {
                 "Assign   : Token name, Expr value",
                 "Binary   : Expr left, Token operator, Expr right",
                 "Call     : Expr callee, Token paren, List<Expr> arguments",
+                "AnonFunc : List<Token> params, List<Stmt> body",
                 "Grouping : Expr expression",
                 "Literal  : Object value",
                 "Logical  : Expr left, Token operator, Expr right",
@@ -43,7 +44,7 @@ public class GenerateAst {
         String path = outputDir + "/" + baseName + ".java";
         PrintWriter writer = new PrintWriter(path, "UTF-8");
 
-        writer.println("package com.frederikzwartbol.interpreter;");
+        writer.println("package com.frederikzwartbol.jada;");
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
