@@ -1,3 +1,7 @@
+var c = 0;
+
+print c;
+
 fun thrice(fn) {
   for (var i = 1; i <= 3; i = i + 1) {
     fn(i);
@@ -5,8 +9,31 @@ fun thrice(fn) {
 }
 
 thrice(fun (a) {
-  print a+a;
+  var b = a + 1;
+
+  print a+b;
 });
 // "2".
 // "4".
 // "6".
+
+class DevonshireCream {
+  serveOn() {
+    return "Scones";
+  }
+}
+
+print DevonshireCream;
+
+class Bagel {}
+Bagel();
+
+print "Bagel";
+
+class Bacon {
+  eat() {
+    print "Crunch crunch crunch!";
+  }
+}
+
+Bacon().eat();

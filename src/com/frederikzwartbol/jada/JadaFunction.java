@@ -5,11 +5,24 @@ import java.util.List;
 class JadaFunction implements JadaCallable {
     private final Stmt.Function declaration;
     private final Environment closure;
-    JadaFunction(Stmt.Function declaration, Environment closure) {
+    private final boolean isInitializer;
+    JadaFunction(Stmt.Function declaration, Environment closure,
+                 boolean isInitializer) {
         this.closure = closure;
         this.declaration = declaration;
+        this.isInitializer = isInitializer;
     }
 
+    /**
+     * Binds the function to an instance. So if the function is reassigned it still knows its parent class.
+     * @param instance
+     * @return
+     */
+    JadaFunction bind(JadaInstance instance) {
+        Environment environment = new Environment(closure);
+        environment.define("this", instance);
+        return new JadaFunction(declaration, environment, isInitializer);
+    }
 
     /**
      * Creates a new environment for the function (SCOPE) and executes the body.
@@ -31,8 +44,11 @@ class JadaFunction implements JadaCallable {
         try {
             interpreter.executeBlock(declaration.body, environment);
         } catch (Return returnValue) {
+            if (isInitializer) return closure.getAt(0, "this");
             return returnValue.value;
         }
+
+        if (isInitializer) return closure.getAt(0, "this");
         return null;
     }
 

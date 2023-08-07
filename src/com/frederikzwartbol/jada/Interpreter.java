@@ -65,6 +65,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     }
 
     @Override
+    public Void visitClassStmt(Stmt.Class stmt) {
+        environment.define(stmt.name.lexeme, null);
+        Map<String, JadaFunction> methods = new HashMap<>();
+        for (Stmt.Function method : stmt.methods) {
+            JadaFunction function = new JadaFunction(method, environment, method.name.lexeme.equals("init"));
+            methods.put(method.name.lexeme, function);
+        }
+        JadaClass klass = new JadaClass(stmt.name.lexeme, methods);
+        environment.assign(stmt.name, klass);
+        return null;
+    }
+    @Override
     public Object visitLiteralExpr(Expr.Literal expr) {
         return expr.value;
     }
@@ -195,6 +207,17 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return new AnonymFunction(expr,environment);
     }
 
+    @Override
+    public Object visitGetExpr(Expr.Get expr) {
+        Object object = evaluate(expr.object);
+        if (object instanceof JadaInstance) {
+            return ((JadaInstance) object).get(expr.name);
+        }
+
+        throw new RuntimeError(expr.name,
+                "Only instances have properties.");
+    }
+
     /**
      * Throws a RuntimeError if the operands are not numbers,hides the original java stack trace error if no check was done.
      * @param operator The operator that is used.
@@ -252,6 +275,24 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return evaluate(expr.right);
     }
 
+    @Override
+    public Object visitSetExpr(Expr.Set expr) {
+        Object object = evaluate(expr.object);
+
+        if (!(object instanceof JadaInstance)) {
+            throw new RuntimeError(expr.name,
+                    "Only instances have fields.");
+        }
+
+        Object value = evaluate(expr.value);
+        ((JadaInstance)object).set(expr.name, value);
+        return value;
+    }
+
+    @Override
+    public Object visitThisExpr(Expr.This expr) {
+        return lookUpVariable(expr.keyword, expr);
+    }
 
     @Override
     public Void visitExpressionStmt(final Stmt.Expression stmt) {
@@ -261,7 +302,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
     @Override
     public Void visitFunctionStmt(Stmt.Function stmt) {
-        JadaFunction function = new JadaFunction(stmt,environment);
+        JadaFunction function = new JadaFunction(stmt,environment,false);
         environment.define(stmt.name.lexeme, function);
         return null;
     }
