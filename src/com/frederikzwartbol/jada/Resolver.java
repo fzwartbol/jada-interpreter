@@ -189,6 +189,14 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Void visitModuleStmt(final Stmt.Module stmt) {
+        beginScope();
+        resolve(stmt.statements);
+        endScope();
+        return null;
+    }
+
+    @Override
     public Void visitVarStmt(Stmt.Var stmt) {
         declare(stmt.name);
         if (stmt.initializer != null) {
@@ -301,5 +309,18 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         for (Stmt statement : statements) {
             resolve(statement);
         }
+    }
+
+    void resolve(Map<String,List<Stmt>> statementsmap) {
+        for (Map.Entry<String,List<Stmt>> entry : statementsmap.entrySet()) {
+            resolve(entry.getValue());
+        }
+    }
+
+    void resolveModules(List<ModuleParser.Module> modules) {
+        for (ModuleParser.Module module : modules) {
+            resolve(module.getStatements());
+        }
+
     }
 }

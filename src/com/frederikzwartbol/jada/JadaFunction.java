@@ -2,6 +2,9 @@ package com.frederikzwartbol.jada;
 
 import java.util.List;
 
+/**
+ * JadaFunction class. Represents a function.
+ */
 class JadaFunction implements JadaCallable {
     private final Stmt.Function declaration;
     private final Environment closure;
@@ -15,7 +18,7 @@ class JadaFunction implements JadaCallable {
 
     /**
      * Binds the function to an instance. So if the function is reassigned it still knows its original parent class.
-     * see following example:
+     * see following example.jada:
      * 'class Foo { bar() { print "bar"; } }'
      * 'var foo = Foo();'
      * 'var bar = foo.bar;'
@@ -24,7 +27,7 @@ class JadaFunction implements JadaCallable {
      * @param instance
      * @return
      */
-    JadaFunction bind(JadaInstance instance) {
+    public JadaFunction bind(JadaInstance instance) {
         Environment environment = new Environment(closure);
         environment.define("this", instance);
         return new JadaFunction(declaration, environment, isInitializer);

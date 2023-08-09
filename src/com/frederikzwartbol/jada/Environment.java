@@ -3,16 +3,18 @@ package com.frederikzwartbol.jada;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Environment class. Represents an environment for scopes.
+ */
 public class Environment {
-
     final Environment enclosing;
     private final Map<String, Object> values = new HashMap<>();
 
-    Environment() {
+    public Environment() {
         enclosing = null;
     }
 
-    Environment(Environment enclosing) {
+    public Environment(Environment enclosing) {
         this.enclosing = enclosing;
     }
 
@@ -24,7 +26,7 @@ public class Environment {
         ancestor(distance).values.put(name.lexeme, value);
     }
 
-    Environment ancestor(int distance) {
+    public Environment ancestor(int distance) {
         Environment environment = this;
         for (int i = 0; i < distance; i++) {
             environment = environment.enclosing;
@@ -34,7 +36,7 @@ public class Environment {
     }
 
 
-    Object get(Token name) {
+    public Object get(Token name) {
         if (values.containsKey(name.lexeme)) {
             return values.get(name.lexeme);
         }
@@ -45,7 +47,7 @@ public class Environment {
                 "Undefined variable '" + name.lexeme + "'.");
     }
 
-    void assign(Token name, Object value) {
+    public void assign(Token name, Object value) {
         if (values.containsKey(name.lexeme)) {
             values.put(name.lexeme, value);
             return;
@@ -60,7 +62,7 @@ public class Environment {
                 "Undefined variable '" + name.lexeme + "'.");
     }
 
-    void define(String name, Object value) {
+    public void define(String name, Object value) {
         values.put(name, value);
     }
 }

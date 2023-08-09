@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Generates  classes for the abstract syntax tree.
+ * A tool which generates classes for the abstract syntax tree (AST) of JADA.
  */
 public class GenerateAst {
     public static void main(String[] args) throws IOException {
@@ -40,6 +40,7 @@ public class GenerateAst {
                 "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
                 "Print      : Expr expression",
                 "Return     : Token keyword, Expr value",
+                "Module     : Token name, Token path, List<Stmt> statements",
                 "Var        : Token name, Expr initializer",
                 "While      : Expr condition, Stmt body"
         ));
@@ -55,7 +56,7 @@ public class GenerateAst {
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
-        writer.println("abstract class " + baseName + " {");
+        writer.println("public abstract class " + baseName + " {");
 
         defineVisitor(writer, baseName, types);
 
@@ -68,7 +69,7 @@ public class GenerateAst {
 
         // The base accept() method.
         writer.println();
-        writer.println("  abstract <R> R accept(Visitor<R> visitor);");
+        writer.println("public  abstract <R> R accept(Visitor<R> visitor);");
 
         writer.println("}");
         writer.close();
@@ -90,7 +91,7 @@ public class GenerateAst {
     private static void defineType(
             PrintWriter writer, String baseName,
             String className, String fieldList) {
-        writer.println("  static class " + className + " extends " +
+        writer.println("public  static class " + className + " extends " +
                 baseName + " {");
 
         // Constructor.

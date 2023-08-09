@@ -1,0 +1,8 @@
+
+class module3class {
+  talk() {
+    return "Hello from module3class";
+  }
+}
+
+

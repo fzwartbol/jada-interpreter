@@ -7,8 +7,7 @@ import java.util.Map;
 
 import static com.frederikzwartbol.jada.TokenType.*;
 
-class
-Scanner {
+class Scanner {
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
     private int start = 0;
@@ -35,6 +34,7 @@ Scanner {
         keywords.put("true",   TRUE);
         keywords.put("var",    VAR);
         keywords.put("while",  WHILE);
+        keywords.put("import", MODULE);
     }
 
     Scanner(String source) {
@@ -51,6 +51,8 @@ Scanner {
         tokens.add(new Token(EOF, "", null, line));
         return tokens;
     }
+
+    // scannen van tokens
 
     private boolean isAtEnd() {
         return current >= source.length();

@@ -3,13 +3,10 @@ package com.frederikzwartbol.jada;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
+
 
 /**
- *
+ * The main class of the Jada interpreter.
  */
 public class Jada {
     private static final Interpreter interpreter = new Interpreter();
@@ -28,9 +25,7 @@ public class Jada {
     static boolean hadRuntimeError = false;
 
     private static void runFile(String path) throws IOException {
-        byte[] bytes = Files.readAllBytes(Paths.get(path));
-        run(new String(bytes, Charset.defaultCharset()));
-
+        run(path);
         // Indicate an error in the exit code.
         if (hadError) System.exit(65);
         if (hadRuntimeError) System.exit(70);
@@ -49,21 +44,21 @@ public class Jada {
         }
     }
 
-    private static void run(String source) {
-        Scanner scanner = new Scanner(source);
-        List<Token> tokens = scanner.scanTokens();
-        Parser parser = new Parser(tokens);
-        List<Stmt> statements = parser.parse();
-
+    private static void run(String mainPath) {
+        ModuleParser moduleParser = new ModuleParser(mainPath);
         // Stop if there was a syntax error.
         if (hadError) return;
 
-        Resolver resolver = new Resolver(interpreter);
-        resolver.resolve(statements);
+        var orderedModules = moduleParser.getTopologicalOrder();
 
+        Resolver resolver = new Resolver(interpreter);
+        resolver.resolveModules(orderedModules);
+
+        // Stop if there was a resolution error.
         if (hadError) return;
 
-        interpreter.interpret(statements);
+        System.out.println("Running " + mainPath + "...");
+        interpreter.interpretModules(orderedModules);
     }
 
     static void error(int line, String message) {

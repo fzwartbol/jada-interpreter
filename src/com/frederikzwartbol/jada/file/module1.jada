@@ -1,0 +1,7 @@
+import module3 {"C:\repos\interpreter\src\com\frederikzwartbol\jada\file\module3.jada"}
+
+print "hello from module 1, this prints when it is interpreted";
+
+var d = "variable is saved in module1";
+
+

@@ -3,12 +3,12 @@ package com.frederikzwartbol.jada;
 import java.util.List;
 
 /**
- * This class is used to store anonymous functions.
+ * This class is used to create an anonymous function.
  */
-class AnonymFunction implements JadaCallable {
+class AnonymousFunction implements JadaCallable {
     private final Expr.AnonFunc declaration;
     private final Environment closure;
-    AnonymFunction(Expr.AnonFunc declaration, Environment closure) {
+    AnonymousFunction(Expr.AnonFunc declaration, Environment closure) {
         this.closure = closure;
         this.declaration = declaration;
     }

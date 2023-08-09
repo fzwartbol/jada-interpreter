@@ -1,5 +1,6 @@
 package com.frederikzwartbol.jada;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,12 +21,12 @@ class Parser {
         while (!isAtEnd()) {
             statements.add(declaration());
         }
-
         return statements;
     }
 
     private Stmt declaration() {
         try {
+            if (match(MODULE)) return moduleDeclaration();
             if (match(CLASS)) return classDeclaration();
             if (match(FUN)) return function("function");
             if (match(VAR)) return varDeclaration();
@@ -35,6 +36,16 @@ class Parser {
             synchronize();
             return null;
         }
+    }
+
+    private Stmt moduleDeclaration() {
+        Token name = consume(IDENTIFIER, "Expect class name.");
+        consume(LEFT_BRACE, "Expect '{' before module body.");
+
+        Token pathToken = consume(STRING, "Expect string for module body.");
+
+        consume(RIGHT_BRACE, "Expect '}' after module body.");
+        return new Stmt.Module(name, pathToken, new ArrayList<>());
     }
 
     private Stmt classDeclaration() {

@@ -1,3 +1,5 @@
+import module1 {"C:\repos\interpreter\src\com\frederikzwartbol\jada\file\module1.jada"}
+
 var c = 0;
 
 print c;
@@ -10,9 +12,10 @@ fun thrice(fn) {
 
 thrice(fun (a) {
   var b = a + 1;
-
+  print "Print from anonymous function";
   print a+b;
 });
+
 // "2".
 // "4".
 // "6".
@@ -37,3 +40,10 @@ class Bacon {
 }
 
 Bacon().eat();
+
+// prints variable from module1
+print d;
+
+// class from another module
+var module3class = module3class();
+print module3class.talk();

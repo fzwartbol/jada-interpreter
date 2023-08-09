@@ -1,5 +1,6 @@
 package com.frederikzwartbol.jada;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,17 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
             @Override
             public String toString() { return "<native fn>"; }
         });
+    }
+
+    void interpretModules(List<ModuleParser.Module> modules) {
+          try {
+                for (ModuleParser.Module module : modules) {
+                    interpret(module.getStatements());
+                }
+            } catch (RuntimeError error) {
+                Jada.runtimeError(error);
+            }
+
     }
     void interpret(List<Stmt> statements) {
         try {
@@ -190,7 +202,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         List<Object> arguments = new ArrayList<>();
         for (Expr argument : expr.arguments) {
             if (argument instanceof Expr.AnonFunc) {
-                arguments.add(new AnonymFunction((Expr.AnonFunc) argument,environment));
+                arguments.add(new AnonymousFunction((Expr.AnonFunc) argument,environment));
             } else{
                 arguments.add(evaluate(argument));
             }
@@ -213,7 +225,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
     @Override
     public Object visitAnonFuncExpr(final Expr.AnonFunc expr) {
-        return new AnonymFunction(expr,environment);
+        return new AnonymousFunction(expr,environment);
     }
 
     @Override
@@ -329,6 +341,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         if (stmt.value != null) value = evaluate(stmt.value);
 
         throw new Return(value);
+    }
+
+    @Override
+    public Void visitModuleStmt(final Stmt.Module stmt) {
+        //do nothing, already handled in the parser
+        return null;
     }
 
     @Override

@@ -7,11 +7,11 @@ public class JadaInstance {
     private JadaClass klass;
     private final Map<String, Object> fields = new HashMap<>();
 
-    JadaInstance(JadaClass klass) {
+    public JadaInstance(JadaClass klass) {
         this.klass = klass;
     }
 
-    Object get(Token name) {
+    public Object get(Token name) {
         if (fields.containsKey(name.lexeme)) {
             return fields.get(name.lexeme);
         }

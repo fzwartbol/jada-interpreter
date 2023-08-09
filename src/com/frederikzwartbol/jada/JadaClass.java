@@ -8,13 +8,13 @@ public class JadaClass implements JadaCallable {
     private final Map<String, JadaFunction> methods;
     private final JadaClass superclass;
 
-    JadaClass(String name,  JadaClass superclass, Map<String,JadaFunction> methods) {
+    public JadaClass(String name,  JadaClass superclass, Map<String,JadaFunction> methods) {
         this.name = name;
         this.methods = methods;
         this.superclass = superclass;
     }
 
-    JadaFunction findMethod(String name) {
+    public JadaFunction findMethod(String name) {
         if (methods.containsKey(name)) {
             return methods.get(name);
         }
