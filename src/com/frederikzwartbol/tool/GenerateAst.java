@@ -56,7 +56,7 @@ public class GenerateAst {
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
-        writer.println("public abstract class " + baseName + " {");
+        writer.println("abstract class " + baseName + " {");
 
         defineVisitor(writer, baseName, types);
 
@@ -69,7 +69,7 @@ public class GenerateAst {
 
         // The base accept() method.
         writer.println();
-        writer.println("public  abstract <R> R accept(Visitor<R> visitor);");
+        writer.println("abstract <R> R accept(Visitor<R> visitor);");
 
         writer.println("}");
         writer.close();
@@ -91,7 +91,7 @@ public class GenerateAst {
     private static void defineType(
             PrintWriter writer, String baseName,
             String className, String fieldList) {
-        writer.println("public  static class " + className + " extends " +
+        writer.println("static class " + className + " extends " +
                 baseName + " {");
 
         // Constructor.

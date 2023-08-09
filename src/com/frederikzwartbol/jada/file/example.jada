@@ -1,9 +1,40 @@
 import module1 {"C:\repos\interpreter\src\com\frederikzwartbol\jada\file\module1.jada"}
 
+// supports print statements
+print "Hello World!";
 var c = 0;
-
 print c;
 
+// supports if statements
+print "if statement";
+if (c == 0) {
+  print "c is 0";
+} else {
+  print "c is not 0";
+}
+
+// supports while statements
+print "while loop";
+while (c < 10) {
+  c = c + 1;
+  print c;
+}
+
+// supports for statements
+print "for loop";
+for (var i = 0; i < 10; i = i + 1) {
+  print i;
+}
+
+// supports functions
+print "function";
+fun add(a, b) {
+  return a + b;
+}
+print add(1, 2);
+
+// support anonymous functions
+print "anonymous function";
 fun thrice(fn) {
   for (var i = 1; i <= 3; i = i + 1) {
     fn(i);
@@ -12,14 +43,12 @@ fun thrice(fn) {
 
 thrice(fun (a) {
   var b = a + 1;
-  print "Print from anonymous function";
   print a+b;
 });
 
-// "2".
-// "4".
-// "6".
 
+// supports classes
+print "class";
 class DevonshireCream {
   serveOn() {
     return "Scones";
