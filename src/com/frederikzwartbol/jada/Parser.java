@@ -40,11 +40,10 @@ class Parser {
 
     private Stmt moduleDeclaration() {
         Token name = consume(IDENTIFIER, "Expect class name.");
-        consume(LEFT_BRACE, "Expect '{' before module body.");
 
         Token pathToken = consume(STRING, "Expect string for module body.");
 
-        consume(RIGHT_BRACE, "Expect '}' after module body.");
+        consume(SEMICOLON,"Expect semicolon after module body");
         return new Stmt.Module(name, pathToken, new ArrayList<>());
     }
 

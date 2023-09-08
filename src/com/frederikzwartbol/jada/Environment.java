@@ -31,10 +31,8 @@ public class Environment {
         for (int i = 0; i < distance; i++) {
             environment = environment.enclosing;
         }
-
         return environment;
     }
-
 
     public Object get(Token name) {
         if (values.containsKey(name.lexeme)) {

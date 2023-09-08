@@ -1,4 +1,4 @@
-import module1 {"C:\repos\interpreter\src\com\frederikzwartbol\jada\file\module1.jada"}
+import module1 "module1.jada";
 
 // supports print statements
 print "Hello World!";
@@ -42,7 +42,7 @@ fun thrice(fn) {
 }
 
 thrice(fun (a) {
-  var b = a + 1;
+  var b = a + 2;
   print a+b;
 });
 

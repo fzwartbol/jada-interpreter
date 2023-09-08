@@ -13,7 +13,6 @@ class Scanner {
     private int start = 0;
     private int current = 0;
     private int line = 1;
-
     private static final Map<String, TokenType> keywords;
 
     static {
@@ -51,8 +50,6 @@ class Scanner {
         tokens.add(new Token(EOF, "", null, line));
         return tokens;
     }
-
-    // scannen van tokens
 
     private boolean isAtEnd() {
         return current >= source.length();

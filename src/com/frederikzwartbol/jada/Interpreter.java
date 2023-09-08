@@ -201,11 +201,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
         List<Object> arguments = new ArrayList<>();
         for (Expr argument : expr.arguments) {
-            if (argument instanceof Expr.AnonFunc) {
-                arguments.add(new AnonymousFunction((Expr.AnonFunc) argument,environment));
-            } else{
                 arguments.add(evaluate(argument));
-            }
         }
 
         if (!(callee instanceof JadaCallable)) {
@@ -223,8 +219,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return function.call(this, arguments);
     }
 
+
+
     @Override
     public Object visitAnonFuncExpr(final Expr.AnonFunc expr) {
+        // the way anonymous function work now, this shouldnt happen
         return new AnonymousFunction(expr,environment);
     }
 

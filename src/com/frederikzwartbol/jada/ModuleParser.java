@@ -2,9 +2,14 @@ package com.frederikzwartbol.jada;
 
 import java.util.*;
 
+import static com.frederikzwartbol.jada.FileLoader.generateAbsolutePath;
+import static com.frederikzwartbol.jada.FileLoader.readFromPath;
+
 /**
- * Parses modules and their dependencies.
- * First creates a map of all modules, adds new modules if found during parsing. Afterwards it creates a graph of modules and their dependencies to find the topological ordering.
+ * This class parses modules and their dependencies.
+ * It first creates a map of all modules found during parsing.
+ * Afterward it creates a graph of modules and their dependencies to find the topological ordering in
+ * which order the modules should be loaded by the Jada interpreter.
  */
 public class ModuleParser {
     private final static String MAIN_MODULE_NAME = "main";
@@ -51,7 +56,7 @@ public class ModuleParser {
     }
 
     private void parseModule(String moduleName, String modulePath) {
-        Scanner scanner = new Scanner(new FileLoader().readFromPath(modulePath));
+        Scanner scanner = new Scanner(readFromPath(modulePath));
         List<Token> tokens = scanner.scanTokens();
         Parser parser = new Parser(tokens);
         List<Stmt> statements = parser.parse();
@@ -60,7 +65,7 @@ public class ModuleParser {
         modules.put(moduleName, module);
 
         module.dependencies.forEach(dependency -> {
-            modules.putIfAbsent(dependency.moduleName,new Module(dependency.moduleName, dependency.modulePath));
+            modules.putIfAbsent(dependency.moduleName,new Module(dependency.moduleName, generateAbsolutePath(modulePath,dependency.modulePath)));
         });
     }
 
@@ -92,19 +97,10 @@ public class ModuleParser {
             return statements;
         }
 
-        @Override
-        public String toString() {
-            return "Module{" +
-                    "moduleName='" + moduleName + '\'' +
-                    ", modulePath='" + modulePath + '\'' +
-                    ", dependencies=" + dependencies +
-                    ", parsed=" + parsed +
-                    '}';
-        }
     }
 
     /**
-     * ModuleGraph class: Creates a graph of modules and their dependencies.
+     * Module Graph class: Creates a graph of modules and their dependency modules.
      */
     class ModuleGraph {
         private final Map<Module, List<Module>> graph = new HashMap<>();

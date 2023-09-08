@@ -14,7 +14,7 @@ public class Jada {
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
-            System.out.println("Usage: jlox [script]");
+            System.out.println("Usage: Jada [script]");
             System.exit(64);
         } else if (args.length == 1) {
             runFile(args[0]);
@@ -24,7 +24,7 @@ public class Jada {
     }
     static boolean hadRuntimeError = false;
 
-    private static void runFile(String path) throws IOException {
+    private static void runFile(String path) {
         run(path);
         // Indicate an error in the exit code.
         if (hadError) System.exit(65);
